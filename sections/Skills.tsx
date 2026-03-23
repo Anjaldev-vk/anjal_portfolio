@@ -360,7 +360,7 @@ export default function Skills() {
                 # currently learning
               </div>
               <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8 }}>
-                {["AWS", "GraphQL", "Kubernetes", "Rust"].map((tech) => (
+                {["AWS", "GraphQL", "Kubernetes"].map((tech) => (
                   <span
                     key={tech}
                     style={{

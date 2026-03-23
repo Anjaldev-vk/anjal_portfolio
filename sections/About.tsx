@@ -14,8 +14,8 @@ const terminalLines = [
 ];
 
 const STATS = [
-  { label: "years_exp", value: "3+", color: "#3fb950" },
-  { label: "projects_built", value: "15+", color: "#58a6ff" },
+  { label: "years_exp", value: "1+", color: "#3fb950" },
+  { label: "projects_built", value: "5+", color: "#58a6ff" },
   { label: "apis_shipped", value: "50+", color: "#a371f7" },
   { label: "coffee_cups", value: "∞", color: "#d29922" },
 ];

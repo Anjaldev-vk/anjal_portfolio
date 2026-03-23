@@ -183,7 +183,7 @@ export default function Home() {
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" fill="none" />
               <path d="M20 20l-3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
-            <span>Anjal_Dev_VK__Portfolio</span>
+            <span>main.py - Portfolio - Anjal_Dev_VK</span>
           </div>
         </div>
         {/* Layout icons and Window controls */}

@@ -353,7 +353,7 @@ export default function Skills() {
                 # currently learning
               </div>
               <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 8 }}>
-                {["AWS", "GraphQL", "Kubernetes"].map((tech) => (
+                {["AWS", "DSA",  "GraphQL", "Kubernetes"].map((tech) => (
                   <span
                     key={tech}
                     style={{

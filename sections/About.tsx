@@ -11,6 +11,11 @@ const terminalLines = [
   { type: "output" as const, text: "• Engineered RESTful API endpoints using Django REST Framework" },
   { type: "output" as const, text: "• Optimized PostgreSQL queries and indexing strategies" },
   { type: "output" as const, text: "• Implemented JWT authentication and role-based access control" },
+  { type: "blank" as const, text: "" },
+  { type: "command" as const, text: "curl -O Anjal_Dev_Resume.pdf" },
+  { type: "output" as const, text: "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current" },
+  { type: "output" as const, text: "                                 Dload  Upload   Total   Spent    Left  Speed" },
+  { type: "output" as const, text: "100  124k  100  124k    0     0   452k      0 --:--:-- --:--:-- --:--:--  454k" },
 ];
 
 const STATS = [
@@ -78,15 +83,16 @@ export default function About() {
 
         {/* Two-column grid */}
         <div className="about-grid">
-          {/* ── Left: docstring bio ── */}
-          <div
-            style={{
-              borderRadius: 8,
-              overflow: "hidden",
-              background: "#0d1117",
-              border: "1px solid #30363d",
-            }}
-          >
+          {/* ── Left: docstring bio + resume ── */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div
+              style={{
+                borderRadius: 8,
+                overflow: "hidden",
+                background: "#0d1117",
+                border: "1px solid #30363d",
+              }}
+            >
             {/* Title bar */}
             <div
               style={{
@@ -163,8 +169,43 @@ export default function About() {
             </div>
           </div>
 
-          {/* ── Right: terminal + background + stats ── */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* Resume Download CTA (Left Column) */}
+          <div style={{ padding: "0 4px" }}>
+            <a
+              href="/Anjal_Dev_Resume.pdf"
+              download
+              className="cta-btn secondary"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+                textDecoration: "none",
+                padding: "12px 24px",
+                fontSize: "0.9rem",
+                borderRadius: 6,
+                background: "#161b22",
+                border: "1px solid #30363d",
+                transition: "all 0.2s",
+                width: "100%",
+                boxSizing: "border-box",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "#58a6ff";
+                (e.currentTarget as HTMLElement).style.background = "#1c2128";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = "#30363d";
+                (e.currentTarget as HTMLElement).style.background = "#161b22";
+              }}
+            >
+              <span style={{ color: "#7d8590" }}>$</span> cat Anjal_Dev_Resume.pdf (Download Resume)
+            </a>
+          </div>
+        </div>
+
+        {/* ── Right Column: terminal + background + stats ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {/* Terminal */}
             <Terminal lines={terminalLines} title="terminal — anjal@dev" animate={true} />
 
@@ -232,6 +273,7 @@ export default function About() {
                 </div>
               ))}
             </div>
+
           </div>
         </div>
       </div>

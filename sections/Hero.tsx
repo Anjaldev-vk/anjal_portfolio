@@ -4,7 +4,7 @@ import { gsap } from "@/lib/gsap";
 
 const CODE_LINES = [
   { text: "# ─────────────────────────────────────────", type: "comment" },
-  { text: "# Developer Portfolio — Anjal Dev VK", type: "comment" },
+  { text: "# Software Developer  — Anjal Dev VK", type: "comment" },
   { text: "# ─────────────────────────────────────────", type: "comment" },
   { text: "", type: "blank" },
   { text: "class BackendDeveloper:", type: "keyword" },
@@ -254,6 +254,9 @@ export default function Hero() {
           </a>
           <a href="#projects" className="cta-btn secondary">
             <span style={{ color: "#7d8590" }}>$</span> python view_projects.py
+          </a>
+          <a href="/Anjal_Dev_Resume.pdf" download className="cta-btn secondary">
+            <span style={{ color: "#7d8590" }}>$</span> cat Anjal_Dev_Resume.pdf
           </a>
         </div>
       </div>

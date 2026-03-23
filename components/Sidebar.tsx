@@ -19,6 +19,7 @@ const TREE: SidebarItem[] = [
   // { name: "task_manager.py", sectionId: "projects", indent: 2 },
   // { name: "blog_cms.py", sectionId: "projects", indent: 2 },
   { name: "contact.py", sectionId: "contact", indent: 1 },
+  { name: "Anjal_Dev_Resume.pdf", sectionId: "resume", indent: 1 },
 ];
 
 // File icon colors matching VS Code
@@ -56,6 +57,14 @@ const chevronRight = (
   </svg>
 );
 
+const pdfIcon = (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6z" fill="#FF4F4F"/>
+    <path d="M14 2v6h6" fill="#FF4F4F" opacity="0.3"/>
+    <text x="7" y="18" fill="white" style={{ fontSize: "6px", fontWeight: "bold", fontFamily: "sans-serif" }}>PDF</text>
+  </svg>
+);
+
 interface SidebarProps {
   activeSection: string;
 }
@@ -64,6 +73,17 @@ export default function Sidebar({ activeSection }: SidebarProps) {
   const scrollTo = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleItemClick = (item: SidebarItem) => {
+    if (item.name === "Anjal_Dev_Resume.pdf") {
+      const link = document.createElement("a");
+      link.href = "/Anjal_Dev_Resume.pdf";
+      link.download = "Anjal_Dev_VK_Anjal_Dev_Resume.pdf";
+      link.click();
+      return;
+    }
+    scrollTo(item.sectionId);
   };
 
   return (
@@ -82,7 +102,7 @@ export default function Sidebar({ activeSection }: SidebarProps) {
         return (
           <div
             key={i}
-            onClick={() => scrollTo(item.sectionId)}
+            onClick={() => handleItemClick(item)}
             style={{
               height: 22,
               display: "flex",
@@ -116,7 +136,7 @@ export default function Sidebar({ activeSection }: SidebarProps) {
             </span>
 
             {/* Icon */}
-            {item.isFolder ? (item.expanded ? folderOpenIcon : folderClosedIcon) : pyIcon}
+            {item.isFolder ? (item.expanded ? folderOpenIcon : folderClosedIcon) : (item.name.endsWith(".pdf") ? pdfIcon : pyIcon)}
 
             {/* Name */}
             <span style={{ overflow: "hidden", textOverflow: "ellipsis", fontSize: "13px" }}>

@@ -32,7 +32,17 @@ const PROJECTS = [
   },
 ];
 
-export default function Projects() {
+export default function Projects({ theme }: { theme: "dark" | "light" }) {
+  const isDark = theme === "dark";
+  const colors = {
+    background: isDark ? "#0d1117" : "#ffffff",
+    border: "var(--border)",
+    text: "var(--text)",
+    textMuted: "var(--muted)",
+    cardBg: "var(--editor-bg)",
+    titleBar: isDark ? "#161b22" : "#eeeeee",
+    cardShadow: isDark ? "rgba(0,0,0,0.4)" : "rgba(0,0,0,0.05)",
+  };
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
@@ -43,7 +53,7 @@ export default function Projects() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        borderTop: "1px solid #30363d",
+        borderTop: `1px solid ${colors.border}`,
         padding: "36px 0",
         boxSizing: "border-box",
       }}
@@ -56,13 +66,13 @@ export default function Projects() {
               fontFamily: "JetBrains Mono, monospace",
               fontSize: "1.35rem",
               fontWeight: 700,
-              color: "#e6edf3",
+              color: colors.text,
               whiteSpace: "nowrap",
             }}
           >
             projects/
           </span>
-          <div style={{ flex: 1, height: 1, background: "#30363d" }} />
+          <div style={{ flex: 1, height: 1, background: colors.border }} />
         </div>
 
         {/* Subtitle */}
@@ -84,66 +94,100 @@ export default function Projects() {
             <div
               key={project.file}
               className="project-card"
-              style={{
+               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 16,
-                padding: "24px",
                 borderRadius: 8,
-                background: "#0d1117",
-                border: `1px solid ${hovered === project.file ? project.color : "#30363d"}`,
-                boxShadow: hovered === project.file ? `0 0 20px ${project.color}22` : "none",
+                overflow: "hidden",
+                background: colors.cardBg,
+                border: `1px solid ${hovered === project.file ? project.color : colors.border}`,
+                boxShadow: hovered === project.file ? `0 0 20px ${project.color}22` : colors.cardShadow,
                 transform: hovered === project.file ? "translateY(-3px)" : "translateY(0)",
                 transition: "all 0.22s ease",
                 boxSizing: "border-box",
+                position: "relative",
               }}
               onMouseEnter={() => setHovered(project.file)}
               onMouseLeave={() => setHovered(null)}
             >
-              {/* Card header */}
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>{project.icon}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div
-                    style={{
-                      fontFamily: "JetBrains Mono, monospace",
-                      fontSize: "0.88rem",
-                      fontWeight: 600,
-                      color: project.color,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {project.name}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "JetBrains Mono, monospace",
-                      fontSize: "0.72rem",
-                      color: "#7d8590",
-                      marginTop: 2,
-                    }}
-                  >
-                    📄 {project.file}
-                  </div>
-                </div>
-                {/* Language badge */}
+              {/* Title Bar (matching terminal) */}
+              <div
+                style={{
+                  padding: "8px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 7,
+                  background: colors.titleBar,
+                  borderBottom: `1px solid ${colors.border}`,
+                }}
+              >
+                {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
+                  <div key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />
+                ))}
                 <span
                   style={{
                     fontFamily: "JetBrains Mono, monospace",
                     fontSize: "0.72rem",
-                    padding: "3px 10px",
-                    borderRadius: 20,
-                    background: `${project.color}18`,
-                    border: `1px solid ${project.color}44`,
-                    color: project.color,
-                    flexShrink: 0,
+                    color: colors.textMuted,
+                    marginLeft: 6,
                   }}
                 >
-                  ● {project.language}
+                  {project.file}
                 </span>
               </div>
+
+              {/* Light Mode Cell Marker */}
+              {!isDark && (
+                <div 
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 32,
+                    bottom: 0,
+                    width: 5,
+                    background: "var(--cell-marker)",
+                    zIndex: 10,
+                    borderRadius: "0 2px 2px 0",
+                  }}
+                />
+              )}
+
+              {/* Content body */}
+              <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: 16 }}>
+                {/* Card header */}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+                  <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>{project.icon}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontFamily: "JetBrains Mono, monospace",
+                        fontSize: "0.88rem",
+                        fontWeight: 600,
+                        color: project.color,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {project.name}
+                    </div>
+                  </div>
+                  {/* Language badge */}
+                  <span
+                    style={{
+                      fontFamily: "JetBrains Mono, monospace",
+                      fontSize: "0.72rem",
+                      padding: "3px 10px",
+                      borderRadius: 20,
+                      background: `${project.color}18`,
+                      border: `1px solid ${project.color}44`,
+                      color: project.color,
+                      flexShrink: 0,
+                    }}
+                  >
+                    ● {project.language}
+                  </span>
+                </div>
 
               {/* Description */}
               <p
@@ -151,8 +195,9 @@ export default function Projects() {
                   fontFamily: "Inter, sans-serif",
                   fontSize: "0.82rem",
                   lineHeight: "1.6",
-                  color: "#c9d1d9",
+                  color: colors.text,
                   margin: 0,
+                  opacity: 0.9,
                 }}
               >
                 {project.desc}
@@ -179,7 +224,7 @@ export default function Projects() {
               </div>
 
               {/* Divider */}
-              <div style={{ height: 1, background: "#30363d" }} />
+              <div style={{ height: 1, background: colors.border }} />
 
               {/* Footer row */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -228,7 +273,8 @@ export default function Projects() {
                 </a>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
         </div>
 
         {/* View all */}

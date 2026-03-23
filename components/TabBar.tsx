@@ -28,9 +28,21 @@ const FolderIcon = () => (
 
 interface TabBarProps {
   activeSection: string;
+  theme: "dark" | "light";
 }
 
-export default function TabBar({ activeSection }: TabBarProps) {
+export default function TabBar({ activeSection, theme }: TabBarProps) {
+  const isDark = theme === "dark";
+  const colors = {
+    background: isDark ? "#2d2d30" : "#f3f3f3",
+    tabActive: isDark ? "#1e1e1e" : "var(--editor-bg)",
+    tabInactive: isDark ? "#2d2d30" : "#f3f3f3",
+    border: "var(--border)",
+    textActive: "var(--text)",
+    textInactive: "var(--muted)",
+    hover: isDark ? "#333333" : "#e8e8e8",
+  };
+
   const scrollTo = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -43,12 +55,12 @@ export default function TabBar({ activeSection }: TabBarProps) {
       className="tab-bar-container"
       style={{
         height: 35,
-        background: "#2d2d30",
+        background: colors.background,
         display: "flex",
         alignItems: "stretch",
         overflowX: "auto",
         overflowY: "hidden",
-        borderBottom: "1px solid #252526",
+        borderBottom: `1px solid ${colors.border}`,
         flexShrink: 0,
         scrollbarWidth: "none",
         msOverflowStyle: "none",
@@ -69,24 +81,24 @@ export default function TabBar({ activeSection }: TabBarProps) {
               whiteSpace: "nowrap",
               fontSize: "13px",
               fontFamily: "'Segoe UI', system-ui, sans-serif",
-              borderRight: "1px solid #252526",
+              borderRight: `1px solid ${colors.border}`,
               position: "relative",
 
               // Active vs inactive
-              background: isActive ? "#1e1e1e" : "#2d2d30",
-              color: isActive ? "#ffffff" : "#969696",
+              background: isActive ? colors.tabActive : colors.tabInactive,
+              color: isActive ? colors.textActive : colors.textInactive,
               borderTop: isActive ? "1px solid #007acc" : "1px solid transparent",
             }}
             onMouseEnter={(e) => {
               if (!isActive) {
-                (e.currentTarget as HTMLElement).style.color = "#cccccc";
-                (e.currentTarget as HTMLElement).style.background = "#333333";
+                (e.currentTarget as HTMLElement).style.color = isDark ? "#cccccc" : "#333333";
+                (e.currentTarget as HTMLElement).style.background = colors.hover;
               }
             }}
             onMouseLeave={(e) => {
               if (!isActive) {
-                (e.currentTarget as HTMLElement).style.color = "#969696";
-                (e.currentTarget as HTMLElement).style.background = "#2d2d30";
+                (e.currentTarget as HTMLElement).style.color = colors.textInactive;
+                (e.currentTarget as HTMLElement).style.background = colors.tabInactive;
               }
             }}
           >

@@ -38,7 +38,17 @@ const CONTACT_INFO = [
 
 const CODE_LINE_COUNT = 14;
 
-export default function Contact() {
+export default function Contact({ theme }: { theme: "dark" | "light" }) {
+  const isDark = theme === "dark";
+  const colors = {
+    background: "var(--background)",
+    border: "var(--border)",
+    titleBar: isDark ? "#161b22" : "#efefef",
+    text: "var(--text)",
+    textMuted: "var(--muted)",
+    editorBg: "var(--editor-bg)",
+    lineNumberBg: "var(--line-number-bg)",
+  };
   const [hovered, setHovered] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -56,7 +66,7 @@ export default function Contact() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        borderTop: "1px solid #30363d",
+        borderTop: `1px solid ${colors.border}`,
         padding: "36px 0",
         boxSizing: "border-box",
       }}
@@ -69,13 +79,13 @@ export default function Contact() {
               fontFamily: "JetBrains Mono, monospace",
               fontSize: "1.35rem",
               fontWeight: 700,
-              color: "#e6edf3",
+              color: colors.text,
               whiteSpace: "nowrap",
             }}
           >
             contact.py
           </span>
-          <div style={{ flex: 1, height: 1, background: "#30363d" }} />
+          <div style={{ flex: 1, height: 1, background: colors.border }} />
         </div>
 
         {/* Code editor */}
@@ -83,10 +93,11 @@ export default function Contact() {
           style={{
             borderRadius: 8,
             overflow: "hidden",
-            background: "#0d1117",
-            border: "1px solid #30363d",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+            background: colors.editorBg,
+            border: `1px solid ${colors.border}`,
+            boxShadow: isDark ? "0 8px 32px rgba(0,0,0,0.4)" : "0 4px 16px rgba(0,0,0,0.05)",
             marginBottom: 20,
+            position: "relative",
           }}
         >
           {/* Title bar */}
@@ -96,8 +107,8 @@ export default function Contact() {
               alignItems: "center",
               gap: 7,
               padding: "8px 14px",
-              background: "#161b22",
-              borderBottom: "1px solid #30363d",
+              background: colors.titleBar,
+              borderBottom: `1px solid ${colors.border}`,
             }}
           >
             {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
@@ -107,13 +118,29 @@ export default function Contact() {
               style={{
                 fontFamily: "JetBrains Mono, monospace",
                 fontSize: "0.75rem",
-                color: "#7d8590",
+                color: colors.textMuted,
                 marginLeft: 6,
               }}
             >
               contact.py
             </span>
           </div>
+
+          {/* Light Mode Cell Marker */}
+          {!isDark && (
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 32,
+                bottom: 0,
+                width: 5,
+                background: "var(--cell-marker)",
+                zIndex: 10,
+                borderRadius: "0 2px 2px 0",
+              }}
+            />
+          )}
 
           {/* Code area */}
           <div style={{ display: "flex" }}>
@@ -122,9 +149,9 @@ export default function Contact() {
               style={{
                 userSelect: "none",
                 padding: "20px 13px",
-                background: "#0d1117",
-                borderRight: "1px solid #21262d",
-                color: "#484f58",
+                background: colors.lineNumberBg,
+                borderRight: `1px solid ${colors.border}`,
+                color: colors.textMuted,
                 fontFamily: "JetBrains Mono, monospace",
                 fontSize: "0.82rem",
                 lineHeight: "1.85rem",
@@ -149,17 +176,17 @@ export default function Contact() {
                 flex: 1,
               }}
             >
-              <div style={{ color: "#6272a4", fontStyle: "italic" }}># Want to work together?</div>
+              <div style={{ color: "var(--syntax-comment)", fontStyle: "italic" }}># Want to work together?</div>
               <div>&nbsp;</div>
               <div>
-                <span style={{ color: "#ff79c6" }}>import</span>
-                <span style={{ color: "#e6edf3" }}> webbrowser</span>
+                <span style={{ color: "var(--syntax-keyword)" }}>import</span>
+                <span style={{ color: colors.text }}> webbrowser</span>
               </div>
               <div>&nbsp;</div>
               <div>
-                <span style={{ color: "#ff79c6" }}>def</span>
-                <span style={{ color: "#50fa7b" }}> reach_out</span>
-                <span style={{ color: "#f8f8f2" }}>():</span>
+                <span style={{ color: "var(--syntax-keyword)" }}>def</span>
+                <span style={{ color: "var(--syntax-fn)" }}> reach_out</span>
+                <span style={{ color: "var(--syntax-punct)" }}>():</span>
               </div>
 
               {CONTACT_INFO.map((item) => (
@@ -180,8 +207,8 @@ export default function Contact() {
                   onMouseLeave={() => setHovered(null)}
                   onClick={() => item.link && window.open(item.link, "_blank")}
                 >
-                  <span className="contact-label" style={{ color: "#e6edf3" }}>{item.label}</span>
-                  <span style={{ color: "#ff79c6" }}>= </span>
+                  <span className="contact-label" style={{ color: "var(--syntax-var)" }}>{item.label}</span>
+                  <span style={{ color: "var(--syntax-operator)" }}> = </span>
                   <span
                     className="contact-value"
                     style={{
@@ -197,8 +224,8 @@ export default function Contact() {
 
               <div>&nbsp;</div>
               <div style={{ paddingLeft: 20 }}>
-                <span style={{ color: "#ff79c6" }}>return </span>
-                <span style={{ color: "#f1fa8c" }}>"Let&apos;s build something great 🚀"</span>
+                <span style={{ color: "var(--syntax-keyword)" }}>return </span>
+                <span style={{ color: "var(--syntax-string)" }}>"Let&apos;s build something great 🚀"</span>
               </div>
             </div>
           </div>
@@ -223,7 +250,7 @@ export default function Contact() {
             rel="noopener noreferrer"
             className="cta-btn secondary"
           >
-              GitHub Profile
+            GitHub Profile
           </a>
           <a
             href="https://www.linkedin.com/in/anjaldev-vk"
@@ -232,7 +259,7 @@ export default function Contact() {
             className="cta-btn"
             style={{ borderColor: "#a371f7", color: "#a371f7" }}
           >
-              LinkedIn
+            LinkedIn
           </a>
         </div>
 
@@ -249,7 +276,7 @@ export default function Contact() {
           }}
         >
           <span style={{ color: "#3fb950" }}>●</span>
-          <span style={{ color: "#c9d1d9", marginLeft: 8 }}>
+          <span style={{ color: colors.text, marginLeft: 8 }}>
             Currently{" "}
             <span style={{ color: "#3fb950", fontWeight: 600 }}>available</span>{" "}
             for freelance and full-time remote opportunities

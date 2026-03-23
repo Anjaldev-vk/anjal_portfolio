@@ -20,66 +20,56 @@ const CODE_LINES = [
   { text: '        print("Optimizing PostgreSQL performance.")', type: "string" },
 ];
 
-function renderTokens(text: string, type: string) {
-  if (type === "comment")
-    return <span style={{ color: "#6272a4", fontStyle: "italic" }}>{text}</span>;
+function renderTokens(text: string, type: string, theme: "dark" | "light") {
+  const isDark = theme === "dark";
+  const colors = {
+    keyword: "var(--syntax-keyword)",
+    string: "var(--syntax-string)",
+    comment: "var(--syntax-comment)",
+    fn: "var(--syntax-fn)",
+    type: "var(--syntax-type)",
+    var: "var(--syntax-var)",
+    plain: "var(--text)",
+    punct: "var(--syntax-punct)",
+  };
+
+  if (type === "comment") return <span style={{ color: colors.comment, fontStyle: "italic" }}>{text}</span>;
   if (type === "blank") return <span>&nbsp;</span>;
-  if (type === "keyword") {
+  
+  if (type === "keyword" || type === "def" || type === "string") {
     return (
       <span>
-        {text.split(/(class|True|False|None|=)/g).map((part, i) => {
-          if (["class", "True", "False", "None", "="].includes(part))
-            return <span key={i} style={{ color: "#ff79c6" }}>{part}</span>;
-          return <span key={i} style={{ color: "#e6edf3" }}>{part}</span>;
-        })}
-      </span>
-    );
-  }
-  if (type === "def") {
-    return (
-      <span>
-        {text.split(/(def|self)/g).map((part, i) => {
-          if (part === "def") return <span key={i} style={{ color: "#ff79c6" }}>{part}</span>;
-          if (part === "self") return <span key={i} style={{ color: "#a371f7" }}>{part}</span>;
-          const fnMatch = part.match(/^(\s+)(\w+)(\(.*\):)(.*)$/);
-          if (fnMatch) {
-            return (
-              <span key={i}>
-                <span style={{ color: "#e6edf3" }}>{fnMatch[1]}</span>
-                <span style={{ color: "#50fa7b" }}>{fnMatch[2]}</span>
-                <span style={{ color: "#f8f8f2" }}>{fnMatch[3]}</span>
-                <span style={{ color: "#e6edf3" }}>{fnMatch[4]}</span>
-              </span>
-            );
+        {text.split(/("(?:[^"\\]|\\.)*"|True|False|None|def|return|print|class|self|[(]|[)]|[:]|[,]|\[|\])/g).map((part, i) => {
+          if (/^"(?:[^"\\]|\\.)*"$/.test(part)) return <span key={i} style={{ color: colors.string }}>{part}</span>;
+          if (/^(def|return|print|class|self|if|else|for|while|import|from|as)$/.test(part)) return <span key={i} style={{ color: colors.keyword }}>{part}</span>;
+          if (/^(True|False|None)$/.test(part)) return <span key={i} style={{ color: colors.keyword }}>{part}</span>;
+          if (/^[(]|[)]|[:]|[,]|\[|\]$/.test(part)) return <span key={i} style={{ color: colors.punct }}>{part}</span>;
+          if (type === "def" && !/^\s+$/.test(part) && !/^(def|self)$/.test(part)) {
+             const fnMatch = part.match(/^(\w+)/);
+             if (fnMatch) return <span key={i} style={{ color: colors.fn }}>{part}</span>;
           }
-          return <span key={i} style={{ color: "#e6edf3" }}>{part}</span>;
+          if (type === "keyword" && part === "BackendDeveloper") return <span key={i} style={{ color: colors.type }}>{part}</span>;
+          return <span key={i} style={{ color: colors.plain }}>{part}</span>;
         })}
       </span>
     );
   }
-  if (type === "string") {
-    return (
-      <span>
-        {text
-          .split(/("(?:[^"\\]|\\.)*"|True|False|None|def|return|print)/g)
-          .map((part, i) => {
-            if (part.startsWith('"') && part.endsWith('"'))
-              return <span key={i} style={{ color: "#f1fa8c" }}>{part}</span>;
-            if (["True", "False", "None"].includes(part))
-              return <span key={i} style={{ color: "#ff79c6" }}>{part}</span>;
-            if (["def", "return", "print"].includes(part))
-              return <span key={i} style={{ color: "#50fa7b" }}>{part}</span>;
-            return <span key={i} style={{ color: "#e6edf3" }}>{part}</span>;
-          })}
-      </span>
-    );
-  }
-  return <span style={{ color: "#e6edf3" }}>{text}</span>;
+
+  return <span style={{ color: colors.plain }}>{text}</span>;
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export default function Hero() {
+export default function Hero({ theme }: { theme: "dark" | "light" }) {
+  const isDark = theme === "dark";
+  const colors = {
+    background: "var(--editor-bg)",
+    border: "var(--border)",
+    titleBar: isDark ? "#161b22" : "#efefef",
+    textMuted: "var(--muted)",
+    lineNumbers: "var(--line-number-bg)",
+    lineNumberText: "var(--muted)",
+  };
   const [visibleCount, setVisibleCount] = useState(0);
   const [currentTyping, setCurrentTyping] = useState("");
   const [typingIdx, setTypingIdx] = useState(0);
@@ -154,11 +144,27 @@ export default function Hero() {
           style={{
             borderRadius: 8,
             overflow: "hidden",
-            background: "#0d1117",
-            border: "1px solid #30363d",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+            background: colors.background,
+            border: `1px solid ${colors.border}`,
+            boxShadow: isDark ? "0 8px 32px rgba(0,0,0,0.4)" : "0 8px 32px rgba(0,0,0,0.05)",
+            position: "relative",
           }}
         >
+          {/* Light Mode Cell Marker */}
+          {!isDark && (
+            <div 
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 40,
+                bottom: 0,
+                width: 5,
+                background: "var(--cell-marker)",
+                zIndex: 10,
+                borderRadius: "0 2px 2px 0",
+              }}
+            />
+          )}
           {/* Title bar */}
           <div
             style={{
@@ -166,8 +172,8 @@ export default function Hero() {
               alignItems: "center",
               gap: 7,
               padding: "8px 14px",
-              background: "#161b22",
-              borderBottom: "1px solid #30363d",
+              background: colors.titleBar,
+              borderBottom: `1px solid ${colors.border}`,
             }}
           >
             {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
@@ -192,9 +198,9 @@ export default function Hero() {
               style={{
                 userSelect: "none",
                 padding: "18px 13px",
-                background: "#0d1117",
-                borderRight: "1px solid #21262d",
-                color: "#484f58",
+                background: colors.lineNumbers,
+                borderRight: `1px solid ${colors.border}`,
+                color: colors.lineNumberText,
                 fontFamily: "JetBrains Mono, monospace",
                 fontSize: "0.82rem",
                 lineHeight: "1.72rem",
@@ -223,11 +229,11 @@ export default function Hero() {
               }}
             >
               {CODE_LINES.slice(0, visibleCount).map((line, i) => (
-                <div key={i}>{renderTokens(line.text, line.type)}</div>
+                <div key={i}>{renderTokens(line.text, line.type, theme)}</div>
               ))}
               {visibleCount < CODE_LINES.length && (
                 <div>
-                  {renderTokens(currentTyping, CODE_LINES[typingIdx]?.type || "plain")}
+                  {renderTokens(currentTyping, CODE_LINES[typingIdx]?.type || "plain", theme)}
                   <span className="cursor" />
                 </div>
               )}

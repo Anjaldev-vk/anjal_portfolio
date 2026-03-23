@@ -15,7 +15,7 @@
   --red: #f85149;
   --orange: #d29922;
 
-  /* Dracula syntax colors */
+  /* Syntax colors - Default (Dark) */
   --syntax-keyword: #ff79c6;
   --syntax-string: #f1fa8c;
   --syntax-comment: #6272a4;
@@ -24,6 +24,33 @@
   --syntax-number: #bd93f9;
   --syntax-operator: #ff79c6;
   --syntax-punct: #f8f8f2;
+  
+  --editor-bg: #1e1e1e;
+  --line-number-bg: #0d1117;
+  --cell-marker: #007acc;
+}
+
+[data-theme='light'] {
+  --bg: #f3f3f3;
+  --surface: #ffffff;
+  --border: #e5e5e5;
+  --text: #24292e;
+  --muted: #6a737d;
+  
+  /* Syntax colors - Light (Reference Image style) */
+  --syntax-keyword: #af00db;
+  --syntax-string: #a31515;
+  --syntax-comment: #008000;
+  --syntax-fn: #795e26;
+  --syntax-var: #001080;
+  --syntax-operator: #af00db;
+  --syntax-punct: #0451a5;
+  --syntax-type: #267f99;
+  --syntax-tag: #800000;
+
+  --editor-bg: #ffffff;
+  --line-number-bg: #f3f3f3;
+  --cell-marker: #007acc;
 }
 
 * {

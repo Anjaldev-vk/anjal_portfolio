@@ -12,9 +12,20 @@ interface TerminalProps {
   title?: string;
   animate?: boolean;
   className?: string;
+  theme: "dark" | "light";
 }
 
-export default function Terminal({ lines, title = "bash", animate = true, className = "" }: TerminalProps) {
+export default function Terminal({ lines, title = "bash", animate = true, className = "", theme }: TerminalProps) {
+  const isDark = theme === "dark";
+  const colors = {
+    background: isDark ? "#0d1117" : "#f6f8fa",
+    border: isDark ? "#30363d" : "#e1e4e8",
+    header: isDark ? "#161b22" : "#eeeeee",
+    textCommand: isDark ? "#3fb950" : "#22863a",
+    textOutput: isDark ? "#58a6ff" : "#005cc5",
+    textPlain: isDark ? "#e6edf3" : "#24292e",
+    textMuted: isDark ? "#7d8590" : "#6a737d",
+  };
   const [visibleLines, setVisibleLines] = useState<TerminalLine[]>([]);
   const [currentText, setCurrentText] = useState("");
   const [showCursor, setShowCursor] = useState(true);
@@ -73,34 +84,34 @@ export default function Terminal({ lines, title = "bash", animate = true, classN
     if (line.type === "command") {
       return (
         <div key={i} className="flex items-start gap-1">
-          <span style={{ color: "#3fb950" }}>$</span>
-          <span style={{ color: "#e6edf3" }}>{line.text}</span>
+          <span style={{ color: colors.textCommand }}>$</span>
+          <span style={{ color: colors.textPlain }}>{line.text}</span>
         </div>
       );
     }
     return (
-      <div key={i} style={{ color: "#58a6ff", paddingLeft: "12px" }}>
+      <div key={i} style={{ color: colors.textOutput, paddingLeft: "12px" }}>
         {line.text}
       </div>
     );
   };
 
   return (
-    <div ref={containerRef} className={`terminal-window ${className}`}>
-      <div className="terminal-header">
+    <div ref={containerRef} className={`terminal-window ${className}`} style={{ background: colors.background, border: `1px solid ${colors.border}` }}>
+      <div className="terminal-header" style={{ background: colors.header, borderBottom: `1px solid ${colors.border}` }}>
         <span className="terminal-dot" style={{ background: "#f85149" }} />
         <span className="terminal-dot" style={{ background: "#d29922" }} />
         <span className="terminal-dot" style={{ background: "#3fb950" }} />
-        <span className="font-mono text-xs ml-2" style={{ color: "#7d8590" }}>
+        <span className="font-mono text-xs ml-2" style={{ color: colors.textMuted }}>
           {title}
         </span>
       </div>
-      <div className="terminal-body">
+      <div className="terminal-body" style={{ background: colors.background }}>
         {visibleLines.map((line, i) => renderLine(line, i))}
         {currentText && (
           <div className="flex items-start gap-1">
-            <span style={{ color: "#3fb950" }}>$</span>
-            <span style={{ color: "#e6edf3" }}>
+            <span style={{ color: colors.textCommand }}>$</span>
+            <span style={{ color: colors.textPlain }}>
               {currentText}
               <span className="cursor" />
             </span>
@@ -108,7 +119,7 @@ export default function Terminal({ lines, title = "bash", animate = true, classN
         )}
         {!currentText && showCursor && (
           <div className="flex items-start gap-1">
-            <span style={{ color: "#3fb950" }}>$</span>
+            <span style={{ color: colors.textCommand }}>$</span>
             <span className="cursor" />
           </div>
         )}

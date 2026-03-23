@@ -63,16 +63,38 @@ const ActivityIcons = {
       <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   ),
+  theme: (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  )
 };
 
 const MENU_ITEMS = ["File", "Edit", "Selection", "View", "Go", "Run", "Terminal", "Help"];
 
 export default function Home() {
   const activeSection = useActiveSection(SECTION_IDS);
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<HTMLDivElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeActivity, setActiveActivity] = useState("explorer");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  const isDark = theme === "dark";
+  const colors = {
+    background: isDark ? "#1e1e1e" : "#f3f3f3",
+    foreground: isDark ? "#cccccc" : "#333333",
+    sidebar: isDark ? "#252526" : "#f3f3f3",
+    activityBar: isDark ? "#333333" : "#2c2c2c",
+    titleBar: isDark ? "#161b22" : "#f3f3f3",
+    border: isDark ? "#252526" : "#dfdfdf",
+    tabActive: isDark ? "#1e1e1e" : "#ffffff",
+    tabInactive: isDark ? "#2d2d30" : "#ececec",
+    breadcrumb: isDark ? "#1e1e1e" : "#ffffff",
+    statusBar: isDark ? "#007acc" : "#007acc",
+    editorBackground: isDark ? "#1e1e1e" : "#ffffff",
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -86,26 +108,28 @@ export default function Home() {
 
   return (
     <div
+      data-theme={theme}
       style={{
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        background: "#1e1e1e",
-        color: "#cccccc",
+        background: colors.background,
+        color: colors.foreground,
         fontFamily: "'Segoe UI', system-ui, sans-serif",
         fontSize: "13px",
         overflow: "hidden",
         userSelect: "none",
+        transition: "background 0.2s, color 0.2s",
       }}
     >
       {/* ── TITLE BAR ─────────────────────────────────── */}
       <div
         style={{
           height: 30,
-          background: "#323233",
+          background: colors.titleBar,
           display: "flex",
           alignItems: "center",
-          borderBottom: "1px solid #252526",
+          borderBottom: `1px solid ${colors.border}`,
           flexShrink: 0,
           gap: 0,
         }}
@@ -128,22 +152,67 @@ export default function Home() {
                 alignItems: "center",
                 cursor: "default",
                 fontSize: "12px",
-                color: "#cccccc",
+                color: isDark ? "#cccccc" : "#333333",
                 transition: "background 0.1s",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#3c3c3c"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = isDark ? "#3c3c3c" : "#e5e5e5"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
             >
               {item}
             </div>
           ))}
         </div>
-        {/* Centered title */}
-        <div style={{ flex: 1, textAlign: "center", fontSize: "12px", color: "#cccccc", opacity: 0.8 }}>
-          main.py — portfolio — Anjal Dev VK
+        {/* Centered search bar */}
+        <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div
+            style={{
+              width: "max(300px, 40%)",
+              height: 22,
+              background: isDark ? "#252526" : "#ffffff",
+              border: `1px solid ${isDark ? "#3c3c3c" : "#dfdfdf"}`,
+              borderRadius: 4,
+              display: "flex",
+              alignItems: "center",
+              padding: "0 8px",
+              gap: 8,
+              color: isDark ? "#cccccc" : "#616161",
+              fontSize: "12px",
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" fill="none" />
+              <path d="M20 20l-3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+            <span>Anjal_Dev_VK__Portfolio</span>
+          </div>
         </div>
-        {/* Window controls */}
-        <div className="hidden md:flex items-center" style={{ flexShrink: 0 }}>
+        {/* Layout icons and Window controls */}
+        <div className="hidden md:flex items-center" style={{ flexShrink: 0, gap: 4, paddingRight: 4 }}>
+          {/* Layout control icons */}
+          {[
+            <svg key="sidebar" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5l.5-.5h13l.5.5v11l-.5.5h-13l-.5-.5v-11zM2 13h3V3H2v10zm4 0h8V3H6v10z"/></svg>,
+            <svg key="panel" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M14.5 2l.5.5v11l-.5.5h-13l-.5-.5v-11l.5-.5h13zM14 3H2v7h12V3zm0 8H2v2h12v-2z"/></svg>,
+            <svg key="layout" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5l.5-.5h13l.5.5v11l-.5.5h-13l-.5-.5v-11zM14 3H9v10h5V3zM8 3H2v10h6V3z"/></svg>
+          ].map((icon, i) => (
+            <div
+              key={i}
+              style={{
+                width: 28,
+                height: 28,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                borderRadius: 4,
+                color: isDark ? "#cccccc" : "#616161",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = isDark ? "#3c3c3c" : "#e5e5e5"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+            >
+              {icon}
+            </div>
+          ))}
+          <div style={{ width: 1, height: 16, background: isDark ? "#3c3c3c" : "#dfdfdf", margin: "0 4px" }} />
           {[
             { icon: "─", hover: "#3c3c3c", title: "Minimize" },
             { icon: "☐", hover: "#3c3c3c", title: "Maximize" },
@@ -161,8 +230,9 @@ export default function Home() {
                 cursor: "default",
                 fontSize: "12px",
                 transition: "background 0.1s",
+                color: isDark ? "#cccccc" : "#333333",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = hover; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = title === "Close" ? "#e81123" : (isDark ? "#3c3c3c" : "#e5e5e5"); }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
             >
               {icon}
@@ -172,7 +242,7 @@ export default function Home() {
         {/* Mobile hamburger */}
         <button
           className="md:hidden"
-          style={{ background: "none", border: "none", color: "#ccc", cursor: "pointer", padding: "0 12px", fontSize: "16px" }}
+          style={{ background: "none", border: "none", color: isDark ? "#cccccc" : "#333333", cursor: "pointer", padding: "0 12px", fontSize: "16px" }}
           onClick={() => setMobileMenuOpen((v) => !v)}
         >
           ☰
@@ -187,11 +257,11 @@ export default function Home() {
           className="hidden md:flex"
           style={{
             width: 48,
-            background: "#333333",
+            background: colors.activityBar,
             flexDirection: "column",
             alignItems: "center",
             paddingTop: 4,
-            borderRight: "1px solid #252526",
+            borderRight: `1px solid ${colors.border}`,
             flexShrink: 0,
           }}
         >
@@ -220,9 +290,9 @@ export default function Home() {
             </div>
           ))}
 
-          {/* Bottom icons (account + settings) */}
+          {/* Bottom icons (account + settings + theme) */}
           <div style={{ flex: 1 }} />
-          {(["account", "settings"] as const).map((key) => (
+          {(["account"] as const).map((key) => (
             <div
               key={key}
               title={key.charAt(0).toUpperCase() + key.slice(1)}
@@ -236,12 +306,30 @@ export default function Home() {
                 color: "#858585",
                 transition: "color 0.15s",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#cccccc"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = isDark ? "#cccccc" : "#333333"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "#858585"; }}
             >
               {ActivityIcons[key]}
             </div>
           ))}
+          <div
+            title="Switch Theme"
+            onClick={() => setTheme(prev => prev === "dark" ? "light" : "dark")}
+            style={{
+              width: 48,
+              height: 48,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "#858585",
+              transition: "color 0.15s",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = isDark ? "#cccccc" : "#333333"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "#858585"; }}
+          >
+            {ActivityIcons.theme}
+          </div>
         </div>
 
         {/* ── SIDEBAR (Explorer panel) ───────────────── */}
@@ -250,8 +338,8 @@ export default function Home() {
           className="hidden md:flex flex-col"
           style={{
             width: 240,
-            background: "#252526",
-            borderRight: "1px solid #1e1e1e",
+            background: colors.sidebar,
+            borderRight: `1px solid ${colors.border}`,
             overflow: "hidden",
             flexShrink: 0,
           }}
@@ -278,26 +366,26 @@ export default function Home() {
               fontWeight: 700,
               textTransform: "uppercase",
               letterSpacing: "0.06em",
-              color: "#cccccc",
-              background: "#2d2d30",
+              color: isDark ? "#cccccc" : "#333333",
+              background: isDark ? "#2d2d30" : "#e8e8e8",
             }}
           >
             ▾ portfolio
           </div>
-          <Sidebar activeSection={activeSection} />
+          <Sidebar activeSection={activeSection} theme={theme} />
         </div>
 
         {/* ── EDITOR AREA ───────────────────────────── */}
         <div ref={editorRef} style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
           {/* Tab bar */}
-          <TabBar activeSection={activeSection} />
+          <TabBar activeSection={activeSection} theme={theme} />
 
           {/* Breadcrumb */}
           <div
             style={{
               height: 22,
-              background: "#1e1e1e",
-              borderBottom: "1px solid #252526",
+              background: colors.breadcrumb,
+              borderBottom: `1px solid ${colors.border}`,
               display: "flex",
               alignItems: "center",
               padding: "0 12px",
@@ -313,13 +401,13 @@ export default function Home() {
           </div>
 
           {/* Scrollable content */}
-          <main className="editor-main">
-            <Hero />
-            <About />
-            <Skills />
-            <Projects />
-            <TypingTest />
-            <Contact />
+          <main className="editor-main" style={{ background: colors.background }}>
+            <Hero theme={theme} />
+            <About theme={theme} />
+            <Skills theme={theme} />
+            <Projects theme={theme} />
+            <TypingTest theme={theme} />
+            <Contact theme={theme} />
 
             <footer
               style={{
@@ -378,23 +466,59 @@ export default function Home() {
         >
           <div
             className="mobile-drawer open"
-            style={{ position: "absolute", bottom: 0, left: 0, right: 0, maxHeight: "70vh", overflow: "auto", padding: "12px 0", background: "#252526" }}
+            style={{ position: "absolute", bottom: 0, left: 0, right: 0, maxHeight: "70vh", overflow: "auto", padding: "12px 0", background: colors.sidebar }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ padding: "8px 16px", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", color: "#bbb", borderBottom: "1px solid #3c3c3c", marginBottom: 8 }}>
-              Explorer
+            <div style={{
+              padding: "8px 16px",
+              fontSize: "11px",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              color: isDark ? "#bbb" : "#666",
+              borderBottom: `1px solid ${colors.border}`,
+              marginBottom: 8,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center"
+            }}>
+              <span>Explorer</span>
+              <div
+                onClick={() => setTheme(prev => prev === "dark" ? "light" : "dark")}
+                style={{ cursor: "pointer", color: "#858585", display: "flex", alignItems: "center" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = isDark ? "#cccccc" : "#333333"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "#858585"; }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.5" />
+                    <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+              </div>
             </div>
             {SECTION_IDS.map((id) => (
               <div
                 key={id}
-                style={{ padding: "6px 24px", color: activeSection === id ? "#ffffff" : "#cccccc", background: activeSection === id ? "#37373d" : "transparent", cursor: "pointer", fontSize: "13px", fontFamily: "'JetBrains Mono', monospace" }}
+                style={{
+                  padding: "6px 24px",
+                  color: activeSection === id ? (isDark ? "#ffffff" : "#000000") : (isDark ? "#cccccc" : "#333333"),
+                  background: activeSection === id ? (isDark ? "#37373d" : "#e8e8e8") : "transparent",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
                 onClick={() => {
                   const el = document.getElementById(id);
                   if (el) el.scrollIntoView({ behavior: "smooth" });
                   setMobileMenuOpen(false);
                 }}
               >
-                🐍 {SECTION_FILES[id]}
+                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 48 48">
+                  <path fill="#0277BD" d="M24.047,5c-1.555,0.005-2.633,0.142-3.936,0.367c-3.848,0.67-4.549,2.077-4.549,4.67V14h9v2H15.22h-4.35c-2.636,0-4.943,1.242-5.674,4.219c-0.826,3.417-0.863,5.557,0,9.125C5.851,32.005,7.294,34,9.931,34h3.632v-5.104c0-2.966,2.686-5.896,5.764-5.896h7.236c2.523,0,5-1.862,5-4.377v-8.586c0-2.439-1.759-4.263-4.218-4.672C27.406,5.359,25.589,4.994,24.047,5z M19.063,9c0.821,0,1.5,0.677,1.5,1.502c0,0.833-0.679,1.498-1.5,1.498c-0.837,0-1.5-0.664-1.5-1.498C17.563,9.68,18.226,9,19.063,9z"></path>
+                  <path fill="#FFC107" d="M23.078,43c1.555-0.005,2.633-0.142,3.936-0.367c3.848-0.67,4.549-2.077,4.549-4.67V34h-9v-2h9.343h4.35c2.636,0,4.943-1.242,5.674-4.219c0.826-3.417,0.863-5.557,0-9.125C41.274,15.995,39.831,14,37.194,14h-3.632v5.104c0,2.966-2.686,5.896-5.764,5.896h-7.236c-2.523,0-5,1.862-5,4.377v8.586c0,2.439,1.759,4.263,4.218,4.672C19.719,42.641,21.536,43.006,23.078,43z M28.063,39c-0.821,0-1.5-0.677-1.5-1.502c0-0.833,0.679-1.498,1.5-1.498c0.837,0,1.5,0.664,1.5,1.498C29.563,38.32,28.899,39,28.063,39z"></path>
+                </svg>
+                <span>{SECTION_FILES[id]}</span>
               </div>
             ))}
           </div>

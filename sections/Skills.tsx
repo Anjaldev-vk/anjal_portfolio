@@ -64,8 +64,9 @@ const SKILLS = [
   },
 ];
 
-function SkillBar({ name, level, color }: { name: string; level: number; color: string }) {
+function SkillBar({ name, level, color, theme }: { name: string; level: number; color: string; theme: "dark" | "light" }) {
   const [hovered, setHovered] = useState(false);
+  const isDark = theme === "dark";
   return (
     <div
       style={{ marginBottom: 14 }}
@@ -105,7 +106,22 @@ function SkillBar({ name, level, color }: { name: string; level: number; color: 
   );
 }
 
-export default function Skills() {
+export default function Skills({ theme }: { theme: "dark" | "light" }) {
+  const isDark = theme === "dark";
+  const colors = {
+    background: "var(--editor-bg)",
+    border: "var(--border)",
+    titleBar: isDark ? "#161b22" : "#f6f8fa",
+    text: "var(--text)",
+    textMuted: "var(--muted)",
+    cardBg: "var(--surface)",
+    tokenKeyword: "var(--syntax-keyword)",
+    tokenString: "var(--syntax-string)",
+    tokenPlain: "var(--text)",
+    tokenComment: "var(--syntax-comment)",
+    tabBg: isDark ? "#161b22" : "#f1f3f5",
+    lineNumbersBg: "var(--line-number-bg)",
+  };
   const [activeTab, setActiveTab] = useState("backend");
   const active = SKILLS.find((s) => s.category === activeTab) || SKILLS[0];
   const codeLineCount = SKILLS.length + 4;
@@ -118,7 +134,7 @@ export default function Skills() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        borderTop: "1px solid #30363d",
+        borderTop: `1px solid ${colors.border}`,
         padding: "36px 0",
         boxSizing: "border-box",
       }}
@@ -131,12 +147,12 @@ export default function Skills() {
               fontFamily: "JetBrains Mono, monospace",
               fontSize: "1.35rem",
               fontWeight: 700,
-              color: "#e6edf3",
+              color: colors.text,
             }}
           >
             skills.py
           </span>
-          <div style={{ flex: 1, height: 1, background: "#30363d" }} />
+          <div style={{ flex: 1, height: 1, background: colors.border }} />
         </div>
 
         {/* Grid */}
@@ -147,12 +163,28 @@ export default function Skills() {
             style={{
               borderRadius: 8,
               overflow: "hidden",
-              background: "#0d1117",
-              border: "1px solid #30363d",
+              background: colors.background,
+              border: `1px solid ${colors.border}`,
               display: "flex",
               flexDirection: "column",
+              position: "relative",
             }}
           >
+            {/* Light Mode Cell Marker */}
+            {!isDark && (
+              <div 
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 33,
+                  bottom: 0,
+                  width: 5,
+                  background: "var(--cell-marker)",
+                  zIndex: 10,
+                  borderRadius: "0 2px 2px 0",
+                }}
+              />
+            )}
             {/* Title bar */}
             <div
               style={{
@@ -160,8 +192,8 @@ export default function Skills() {
                 display: "flex",
                 alignItems: "center",
                 gap: 7,
-                background: "#161b22",
-                borderBottom: "1px solid #30363d",
+                background: colors.titleBar,
+                borderBottom: `1px solid ${colors.border}`,
                 flexShrink: 0,
               }}
             >
@@ -188,9 +220,9 @@ export default function Skills() {
                 style={{
                   userSelect: "none",
                   padding: "20px 13px",
-                  background: "#0d1117",
-                  borderRight: "1px solid #21262d",
-                  color: "#484f58",
+                  background: colors.lineNumbersBg,
+                  borderRight: `1px solid ${colors.border}`,
+                  color: colors.textMuted,
                   fontFamily: "JetBrains Mono, monospace",
                   fontSize: "0.82rem",
                   lineHeight: "2.15rem",
@@ -215,12 +247,13 @@ export default function Skills() {
                   lineHeight: "2.15rem",
                   flex: 1,
                   overflowX: "hidden",
+                  background: colors.background,
                 }}
               >
                 <div>
-                  <span style={{ color: "#8be9fd" }}>SKILLS</span>
-                  <span style={{ color: "#ff79c6" }}> = </span>
-                  <span style={{ color: "#f8f8f2" }}>{"{"}</span>
+                  <span style={{ color: "var(--syntax-var)" }}>SKILLS</span>
+                  <span style={{ color: "var(--syntax-operator)" }}> = </span>
+                  <span style={{ color: "var(--syntax-punct)" }}>{"{"}</span>
                 </div>
                 {SKILLS.map((s) => (
                   <div
@@ -234,21 +267,22 @@ export default function Skills() {
                           : "2px solid transparent",
                       transition: "border-color 0.15s",
                       cursor: "pointer",
+                      color: activeTab === s.category ? s.color : colors.text,
                     }}
                   >
-                    <span style={{ color: "#f1fa8c" }}>"{s.category}"</span>
-                    <span style={{ color: "#ff79c6" }}>: </span>
+                    <span style={{ color: colors.tokenString }}>"{s.category}"</span>
+                    <span style={{ color: "var(--syntax-punct)" }}>: </span>
                     <span style={{ color: s.color }}>[...]</span>
-                    <span style={{ color: "#f8f8f2" }}>,</span>
+                    <span style={{ color: "var(--syntax-punct)" }}>,</span>
                   </div>
                 ))}
                 <div>
-                  <span style={{ color: "#f8f8f2" }}>{"}"}</span>
+                  <span style={{ color: "var(--syntax-punct)" }}>{"}"}</span>
                 </div>
                 <div
                   style={{
                     marginTop: 10,
-                    color: "#6272a4",
+                    color: "var(--syntax-comment)",
                     fontStyle: "italic",
                     fontSize: "0.76rem",
                   }}
@@ -266,8 +300,8 @@ export default function Skills() {
               style={{
                 borderRadius: 8,
                 overflow: "hidden",
-                background: "#0d1117",
-                border: "1px solid #30363d",
+                background: colors.background,
+                border: `1px solid ${colors.border}`,
                 display: "flex",
                 flexDirection: "column",
                 flex: 1,
@@ -279,8 +313,8 @@ export default function Skills() {
                 style={{
                   display: "flex",
                   overflowX: "auto",
-                  background: "#161b22",
-                  borderBottom: "1px solid #30363d",
+                  background: colors.titleBar,
+                  borderBottom: `1px solid ${colors.border}`,
                   scrollbarWidth: "none",
                   msOverflowStyle: "none",
                   flexShrink: 0,
@@ -326,7 +360,7 @@ export default function Skills() {
                   {active.label}
                 </div>
                 {active.items.map((item) => (
-                  <SkillBar key={item.name} name={item.name} level={item.level} color={active.color} />
+                  <SkillBar key={item.name} name={item.name} level={item.level} color={active.color} theme={theme} />
                 ))}
               </div>
             </div>
@@ -336,14 +370,14 @@ export default function Skills() {
               style={{
                 borderRadius: 8,
                 padding: "16px 24px",
-                background: "#161b22",
-                border: "1px solid #30363d",
+                background: colors.cardBg,
+                border: `1px solid ${colors.border}`,
                 flexShrink: 0,
               }}
             >
               <div
                 style={{
-                  color: "#6272a4",
+                  color: colors.tokenComment,
                   fontFamily: "JetBrains Mono, monospace",
                   fontSize: "0.78rem",
                   fontStyle: "italic",
@@ -361,9 +395,9 @@ export default function Skills() {
                       fontSize: "0.78rem",
                       padding: "5px 14px",
                       borderRadius: 4,
-                      border: "1px solid rgba(248, 81, 73, 0.4)",
-                      color: "#f85149",
-                      background: "rgba(248, 81, 73, 0.08)",
+                      border: `1px solid ${isDark ? "rgba(248, 81, 73, 0.4)" : "rgba(207, 34, 46, 0.4)"}`,
+                      color: isDark ? "#f85149" : "#cf222e",
+                      background: isDark ? "rgba(248, 81, 73, 0.08)" : "rgba(207, 34, 46, 0.05)",
                     }}
                   >
                     {tech}

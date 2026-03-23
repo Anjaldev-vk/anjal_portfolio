@@ -66,9 +66,19 @@ const pdfIcon = (
 
 interface SidebarProps {
   activeSection: string;
+  theme: "dark" | "light";
 }
 
-export default function Sidebar({ activeSection }: SidebarProps) {
+export default function Sidebar({ activeSection, theme }: SidebarProps) {
+  const isDark = theme === "dark";
+  const colors = {
+    sidebar: isDark ? "#252526" : "#f3f3f3",
+    itemHover: isDark ? "#2a2d2e" : "#e8e8e8",
+    itemActive: isDark ? "#37373d" : "#007acc1a",
+    text: isDark ? "#cccccc" : "#333333",
+    textActive: isDark ? "#ffffff" : "#007acc",
+  };
+
   const scrollTo = (sectionId: string) => {
     const el = document.getElementById(sectionId);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -109,8 +119,8 @@ export default function Sidebar({ activeSection }: SidebarProps) {
               paddingLeft: `${depth * 12 + 4}px`,
               gap: 4,
               cursor: "pointer",
-              background: isActive ? "#37373d" : "transparent",
-              color: isActive ? "#ffffff" : "#cccccc",
+              background: isActive ? colors.itemActive : "transparent",
+              color: isActive ? colors.textActive : colors.text,
               fontSize: "13px",
               fontFamily: "'Segoe UI', system-ui, sans-serif",
               position: "relative",
@@ -118,7 +128,7 @@ export default function Sidebar({ activeSection }: SidebarProps) {
               overflow: "hidden",
             }}
             onMouseEnter={(e) => {
-              if (!isActive) (e.currentTarget as HTMLElement).style.background = "#2a2d2e";
+              if (!isActive) (e.currentTarget as HTMLElement).style.background = colors.itemHover;
             }}
             onMouseLeave={(e) => {
               if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent";
@@ -130,7 +140,7 @@ export default function Sidebar({ activeSection }: SidebarProps) {
             )}
 
             {/* Chevron for folders */}
-            <span style={{ color: "#cccccc", opacity: 0.7, width: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <span style={{ color: colors.text, opacity: 0.7, width: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               {item.isFolder ? (item.expanded ? chevronDown : chevronRight) : <span style={{ width: 12 }} />}
             </span>
 

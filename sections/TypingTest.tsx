@@ -50,7 +50,16 @@ if __name__ == "__main__":
   }
 ];
 
-export default function TypingTest() {
+export default function TypingTest({ theme }: { theme: "dark" | "light" }) {
+  const isDark = theme === "dark";
+  const colors = {
+    background: "var(--background)",
+    border: "var(--border)",
+    editorBg: "var(--editor-bg)",
+    text: "var(--text)",
+    textMuted: "var(--muted)",
+    cursor: isDark ? "#58a6ff" : "#0969da",
+  };
   const [sampleIndex, setSampleIndex] = useState(0);
   const [userInput, setUserInput] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -140,10 +149,10 @@ export default function TypingTest() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        borderTop: "1px solid #30363d",
+        borderTop: `1px solid ${colors.border}`,
         padding: "64px 0",
         boxSizing: "border-box",
-        background: "#0d1117",
+        background: colors.background,
       }}
     >
       <div className="section-container" ref={containerRef}>
@@ -154,13 +163,13 @@ export default function TypingTest() {
               fontFamily: "JetBrains Mono, monospace",
               fontSize: "1.35rem",
               fontWeight: 700,
-              color: "#e6edf3",
+              color: colors.text,
               whiteSpace: "nowrap",
             }}
           >
             typing_test.py
           </span>
-          <div style={{ flex: 1, height: 1, background: "#30363d" }} />
+          <div style={{ flex: 1, height: 1, background: colors.border }} />
           <button 
             onClick={resetGame}
             className="cta-btn secondary"
@@ -174,8 +183,8 @@ export default function TypingTest() {
         <div
           style={{
             position: "relative",
-            background: "#161b22",
-            border: "1px solid #30363d",
+            background: colors.editorBg,
+            border: `1px solid ${colors.border}`,
             borderRadius: "8px",
             padding: "24px",
             minHeight: "300px",
@@ -184,7 +193,7 @@ export default function TypingTest() {
             lineHeight: "1.6",
             cursor: "text",
             overflow: "hidden",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+            boxShadow: isDark ? "0 10px 30px rgba(0,0,0,0.5)" : "0 10px 30px rgba(0,0,0,0.05)",
           }}
           onClick={() => inputRef.current?.focus()}
         >
@@ -199,13 +208,12 @@ export default function TypingTest() {
               opacity: 0,
               pointerEvents: "none",
             }}
-            autoFocus
           />
 
           {/* Code Display */}
-          <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", color: "#6e7681" }}>
+          <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-all", color: isDark ? "#6e7681" : "#afb8c1" }}>
             {targetCode.split("").map((char, index) => {
-              let color = "#6e7681";
+              let color = isDark ? "#6e7681" : "#afb8c1";
               let background = "transparent";
               const isTyped = index < userInput.length;
               const isCurrent = index === userInput.length;
@@ -222,7 +230,7 @@ export default function TypingTest() {
                   style={{
                     color,
                     background,
-                    borderBottom: isCurrent ? "2px solid #58a6ff" : "none",
+                    borderBottom: isCurrent ? `2px solid ${colors.cursor}` : "none",
                     transition: "all 0.1s ease",
                   } as any}
                 >
@@ -238,7 +246,7 @@ export default function TypingTest() {
               style={{
                 position: "absolute",
                 inset: 0,
-                background: "rgba(13, 17, 23, 0.9)",
+                background: isDark ? "rgba(13, 17, 23, 0.9)" : "rgba(255, 255, 255, 0.9)",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -251,12 +259,12 @@ export default function TypingTest() {
               <h3 style={{ color: "#3fb950", fontSize: "1.5rem", margin: 0 }}>Test Complete!</h3>
               <div style={{ display: "flex", gap: 32 }}>
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: "2rem", fontWeight: 800, color: "#fff" }}>{wpm}</div>
-                  <div style={{ fontSize: "0.8rem", color: "#8b949e" }}>WPM</div>
+                  <div style={{ fontSize: "2rem", fontWeight: 800, color: isDark ? "#fff" : "#000" }}>{wpm}</div>
+                  <div style={{ fontSize: "0.8rem", color: colors.textMuted }}>WPM</div>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: "2rem", fontWeight: 800, color: "#fff" }}>{accuracy}%</div>
-                  <div style={{ fontSize: "0.8rem", color: "#8b949e" }}>Accuracy</div>
+                  <div style={{ fontSize: "2rem", fontWeight: 800, color: isDark ? "#fff" : "#000" }}>{accuracy}%</div>
+                  <div style={{ fontSize: "0.8rem", color: colors.textMuted }}>Accuracy</div>
                 </div>
               </div>
               <button 
@@ -278,35 +286,46 @@ export default function TypingTest() {
             marginTop: 20,
             fontFamily: "JetBrains Mono, monospace",
             fontSize: "0.9rem",
-            color: "#8b949e",
+            color: colors.textMuted,
           }}
         >
           <div>
-            Time: <span style={{ color: "#e6edf3" }}>{startTime && now ? ((now - startTime) / 1000).toFixed(1) : "0.0"}s</span>
+            Time: <span style={{ color: colors.text }}>{startTime && now ? ((now - startTime) / 1000).toFixed(1) : "0.0"}s</span>
           </div>
           <div>
-            WPM: <span style={{ color: "#58a6ff" }}>{wpm}</span>
+            WPM: <span style={{ color: isDark ? "#58a6ff" : "#005cc5" }}>{wpm}</span>
           </div>
           <div>
             Accuracy: <span style={{ color: accuracy < 90 ? "#f85149" : "#3fb950" }}>{accuracy}%</span>
           </div>
         </div>
 
-        {/* Instructions */}
+         {/* Instructions */}
         <div
           style={{
             marginTop: 40,
-            padding: "16px",
-            background: "#161b22",
-            border: "1px solid #30363d",
-            borderRadius: "6px",
+            padding: "20px",
+            background: isDark ? "#161b22" : "#eeeeee",
+            border: `1px solid ${colors.border}`,
+            borderRadius: "8px",
             fontSize: "0.85rem",
-            color: "#8b949e",
-            fontStyle: "italic",
+            color: colors.textMuted,
+            fontFamily: "JetBrains Mono, monospace",
           }}
         >
-          # Instruction: Click inside the dark area and start typing to begin the test. 
-          The timer starts on your first keypress. Try to match the code exactly!
+          <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+            <span style={{ color: "#ff5f57" }}>●</span>
+            <span style={{ color: "#febc2e" }}>●</span>
+            <span style={{ color: "#28c840" }}>●</span>
+            <span style={{ marginLeft: 8, opacity: 0.8 }}>instruction.sh</span>
+          </div>
+          <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: 12 }}>
+            <span style={{ color: isDark ? "#3fb950" : "#22863a" }}>$</span> cat typing_test_guide.txt
+            <div style={{ marginTop: 8, color: colors.text, opacity: 0.9 }}>
+              Click inside the editor and start typing to begin the test. 
+              The timer starts on your first keypress. Try to match the code exactly!
+            </div>
+          </div>
         </div>
       </div>
     </section>

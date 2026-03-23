@@ -266,6 +266,184 @@ body {
   color: var(--blue);
 }
 
+/* ─── Responsive layout classes ──────────────────────────────── */
+
+/* Section inner container */
+.section-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* About: 2-col grid */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* About: 4-col stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* Skills: 5fr 7fr grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* Projects: 2-col grid */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Main editor padding class */
+.editor-main {
+  flex: 1;
+  overflow-y: auto;
+  background: #1e1e1e;
+  padding-left: 24px;
+  padding-right: 24px;
+  user-select: text;
+}
+
+/* Status bar items: hide some on mobile */
+.statusbar-hide-mobile {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .section-container {
+    padding: 0 16px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-main {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .statusbar-hide-mobile {
+    display: none;
+  }
+
+  /* Shrink code font size slightly on small screens */
+  .code-block-font {
+    font-size: 0.75rem !important;
+  }
+
+  /* Hero code block horizontal scroll */
+  .hero-code-area {
+    overflow-x: auto;
+  }
+
+  /* CTA buttons stack on very small screens */
+  .cta-btn {
+    font-size: 0.82rem;
+    padding: 8px 14px;
+  }
+
+  /* Contact value: allow wrap */
+  .contact-value {
+    word-break: break-all;
+  }
+
+  .contact-label {
+    min-width: unset !important;
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 0 10px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .editor-main {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
+/* Base styles for labels */
+.contact-label {
+  min-width: 6rem;
+  display: inline-block;
+}
+
+.tab-bar-container::-webkit-scrollbar,
+.skills-tabs-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Skills panel padding and overflow fixes */
+@media (max-width: 768px) {
+  .skills-grid {
+    width: 100% !important;
+  }
+  .skills-grid > div {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  
+  .skills-code-panel, .skills-bars-panel {
+    padding: 12px 12px !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+  
+  .skills-code-content {
+    padding: 12px 12px !important;
+    overflow-x: auto !important;
+  }
+  
+  .skill-line-numbers {
+    padding: 12px 8px !important;
+    min-width: 2rem !important;
+  }
+}
+
+/* Aggressively hide Next.js dev portals and build watchers */
+nextjs-portal,
+[id^="__next-build-watcher"],
+[class^="nextjs-portal"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
 /* Mobile drawer */
 .mobile-drawer {
   position: fixed;

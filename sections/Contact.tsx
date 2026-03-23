@@ -61,15 +61,7 @@ export default function Contact() {
         boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "0 40px",
-          width: "100%",
-          boxSizing: "border-box",
-        }}
-      >
+      <div className="section-container">
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 22 }}>
           <span
@@ -188,9 +180,10 @@ export default function Contact() {
                   onMouseLeave={() => setHovered(null)}
                   onClick={() => item.link && window.open(item.link, "_blank")}
                 >
-                  <span style={{ color: "#e6edf3", minWidth: "6rem" }}>{item.label}</span>
+                  <span className="contact-label" style={{ color: "#e6edf3" }}>{item.label}</span>
                   <span style={{ color: "#ff79c6" }}>= </span>
                   <span
+                    className="contact-value"
                     style={{
                       color: item.color,
                       textDecoration: "underline",

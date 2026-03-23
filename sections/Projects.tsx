@@ -48,15 +48,7 @@ export default function Projects() {
         boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "0 40px",
-          width: "100%",
-          boxSizing: "border-box",
-        }}
-      >
+      <div className="section-container">
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 22 }}>
           <span
@@ -87,13 +79,7 @@ export default function Projects() {
         </div>
 
         {/* Project cards grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 20,
-          }}
-        >
+        <div className="projects-grid">
           {PROJECTS.map((project) => (
             <div
               key={project.file}

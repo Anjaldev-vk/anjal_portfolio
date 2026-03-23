@@ -59,15 +59,7 @@ export default function About() {
         boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "0 40px",
-          width: "100%",
-          boxSizing: "border-box",
-        }}
-      >
+      <div className="section-container">
         {/* Section header */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 22 }}>
           <span
@@ -85,14 +77,7 @@ export default function About() {
         </div>
 
         {/* Two-column grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 20,
-            alignItems: "start",
-          }}
-        >
+        <div className="about-grid">
           {/* ── Left: docstring bio ── */}
           <div
             style={{
@@ -218,13 +203,7 @@ export default function About() {
             </div>
 
             {/* Stats */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: 12,
-              }}
-            >
+            <div className="stats-grid">
               {STATS.map((s) => (
                 <div
                   key={s.label}

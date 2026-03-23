@@ -76,15 +76,18 @@ function SkillBar({ name, level, color }: { name: string; level: number; color: 
         style={{
           display: "flex",
           justifyContent: "space-between",
-          marginBottom: 5,
+          alignItems: "center",
+          gap: 7,
+          marginBottom: 4,
           fontFamily: "JetBrains Mono, monospace",
-          fontSize: "0.8rem",
+          fontSize: "0.78rem",
           color: hovered ? color : "#c9d1d9",
           transition: "color 0.2s",
+          width: "100%",
         }}
       >
-        <span>{name}</span>
-        <span style={{ color }}>{level}%</span>
+        <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={name}>{name}</span>
+        <span style={{ color, flexShrink: 0 }}>{level}%</span>
       </div>
       <div style={{ height: 5, background: "#21262d", borderRadius: 3, overflow: "hidden" }}>
         <div
@@ -120,15 +123,7 @@ export default function Skills() {
         boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "0 40px",
-          width: "100%",
-          boxSizing: "border-box",
-        }}
-      >
+      <div className="section-container">
         {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 22 }}>
           <span
@@ -137,7 +132,6 @@ export default function Skills() {
               fontSize: "1.35rem",
               fontWeight: 700,
               color: "#e6edf3",
-              whiteSpace: "nowrap",
             }}
           >
             skills.py
@@ -146,16 +140,10 @@ export default function Skills() {
         </div>
 
         {/* Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "5fr 7fr",
-            gap: 20,
-            alignItems: "stretch",
-          }}
-        >
+        <div className="skills-grid">
           {/* ── Left: code panel ── */}
           <div
+            className="skills-code-panel"
             style={{
               borderRadius: 8,
               overflow: "hidden",
@@ -196,6 +184,7 @@ export default function Skills() {
             <div style={{ display: "flex", flex: 1 }}>
               {/* Line numbers */}
               <div
+                className="skill-line-numbers"
                 style={{
                   userSelect: "none",
                   padding: "20px 13px",
@@ -218,12 +207,14 @@ export default function Skills() {
 
               {/* Code content */}
               <div
+                className="skills-code-content"
                 style={{
-                  padding: "20px 24px",
+                  padding: "16px 16px",
                   fontFamily: "JetBrains Mono, monospace",
-                  fontSize: "0.88rem",
+                  fontSize: "0.85rem",
                   lineHeight: "2.15rem",
                   flex: 1,
+                  overflowX: "hidden",
                 }}
               >
                 <div>
@@ -284,12 +275,14 @@ export default function Skills() {
             >
               {/* Tabs */}
               <div
+                className="skills-tabs-container"
                 style={{
                   display: "flex",
                   overflowX: "auto",
                   background: "#161b22",
                   borderBottom: "1px solid #30363d",
-                  scrollbarWidth: "none" as const,
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
                   flexShrink: 0,
                 }}
               >
@@ -300,8 +293,8 @@ export default function Skills() {
                     style={{
                       fontFamily: "JetBrains Mono, monospace",
                       fontSize: "0.78rem",
-                      padding: "9px 16px",
-                      whiteSpace: "nowrap" as const,
+                      padding: "9px 12px",
+                      whiteSpace: "nowrap",
                       background: activeTab === s.category ? "#0d1117" : "transparent",
                       color: activeTab === s.category ? s.color : "#7d8590",
                       borderBottom:
@@ -320,7 +313,7 @@ export default function Skills() {
               </div>
 
               {/* Skill bars */}
-              <div style={{ padding: "22px 28px", flex: 1 }}>
+              <div className="skills-bars-panel" style={{ padding: "18px 20px", flex: 1 }}>
                 <div
                   style={{
                     fontFamily: "JetBrains Mono, monospace",

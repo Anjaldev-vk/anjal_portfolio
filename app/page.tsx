@@ -311,16 +311,7 @@ export default function Home() {
           </div>
 
           {/* Scrollable content */}
-          <main
-            style={{
-              flex: 1,
-              overflowY: "auto",
-              background: "#1e1e1e",
-              userSelect: "text",
-              paddingLeft: "24px",
-              paddingRight: "24px",
-            }}
-          >
+          <main className="editor-main">
             <Hero />
             <About />
             <Skills />
@@ -363,15 +354,15 @@ export default function Home() {
       >
         {/* Left items */}
         <StatusBarItem icon="⎇" text="main" />
-        <StatusBarItem text="✓  0" />
-        <StatusBarItem text="⚠  0" />
+        <StatusBarItem text="✓  0" extraClass="statusbar-hide-mobile" />
+        <StatusBarItem text="⚠  0" extraClass="statusbar-hide-mobile" />
         <div style={{ flex: 1 }} />
         {/* Right items */}
-        <StatusBarItem text={`${SECTION_FILES[activeSection]}`} />
-        <StatusBarItem text="Python 3.11" />
-        <StatusBarItem text="UTF-8" />
-        <StatusBarItem text="LF" />
-        <StatusBarItem text="Spaces: 4" />
+        <StatusBarItem text={`${SECTION_FILES[activeSection]}`} extraClass="statusbar-hide-mobile" />
+        <StatusBarItem text="Python 3.11" extraClass="statusbar-hide-mobile" />
+        <StatusBarItem text="UTF-8" extraClass="statusbar-hide-mobile" />
+        <StatusBarItem text="LF" extraClass="statusbar-hide-mobile" />
+        <StatusBarItem text="Spaces: 4" extraClass="statusbar-hide-mobile" />
         <StatusBarItem text="Ln 1, Col 1" />
         <StatusBarItem icon="🔔" text="" />
       </div>
@@ -410,13 +401,14 @@ export default function Home() {
   );
 }
 
-function StatusBarItem({ icon, text }: { icon?: string; text: string }) {
+function StatusBarItem({ icon, text, extraClass }: { icon?: string; text: string; extraClass?: string }) {
   return (
     <div
+      className={extraClass}
       style={{
         padding: "0 8px",
         height: 22,
-        display: "flex",
+        display: extraClass ? undefined : "flex",
         alignItems: "center",
         gap: 4,
         cursor: "pointer",

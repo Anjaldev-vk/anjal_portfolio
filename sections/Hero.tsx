@@ -131,15 +131,7 @@ export default function Hero() {
         boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 1180,
-          margin: "0 auto",
-          padding: "0 40px",
-          boxSizing: "border-box",
-        }}
-      >
+      <div className="section-container">
         {/* Breadcrumb */}
         <div
           style={{
@@ -219,12 +211,14 @@ export default function Hero() {
 
             {/* Code content */}
             <div
+              className="code-block-font hero-code-area"
               style={{
                 padding: "18px 0 18px 26px",
                 fontFamily: "JetBrains Mono, monospace",
                 fontSize: "0.88rem",
                 lineHeight: "1.72rem",
-                whiteSpace: "pre",
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-word",
                 flex: 1,
               }}
             >

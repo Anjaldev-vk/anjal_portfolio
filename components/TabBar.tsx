@@ -39,6 +39,7 @@ export default function TabBar({ activeSection }: TabBarProps) {
 
   return (
     <div
+      className="tab-bar-container"
       style={{
         height: 35,
         background: "#2d2d30",
@@ -48,6 +49,8 @@ export default function TabBar({ activeSection }: TabBarProps) {
         overflowY: "hidden",
         borderBottom: "1px solid #252526",
         flexShrink: 0,
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
       }}
     >
       {TABS.map((tab) => {

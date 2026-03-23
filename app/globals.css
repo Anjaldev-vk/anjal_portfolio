@@ -1,0 +1,286 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:wght@300;400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --green: #3fb950;
+  --green-dim: #1a3a2a;
+  --purple: #a371f7;
+  --blue: #58a6ff;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --red: #f85149;
+  --orange: #d29922;
+
+  /* Dracula syntax colors */
+  --syntax-keyword: #ff79c6;
+  --syntax-string: #f1fa8c;
+  --syntax-comment: #6272a4;
+  --syntax-function: #50fa7b;
+  --syntax-class: #8be9fd;
+  --syntax-number: #bd93f9;
+  --syntax-operator: #ff79c6;
+  --syntax-punct: #f8f8f2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #1e1e1e;
+  color: #cccccc;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Selection */
+::selection {
+  background: rgba(63, 185, 80, 0.3);
+  color: var(--text);
+}
+
+/* Code font class */
+.font-mono {
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* Syntax token classes (Dracula) */
+.token-keyword { color: var(--syntax-keyword); }
+.token-string { color: var(--syntax-string); }
+.token-comment { color: var(--syntax-comment); font-style: italic; }
+.token-function { color: var(--syntax-function); }
+.token-class { color: var(--syntax-class); }
+.token-number { color: var(--syntax-number); }
+.token-operator { color: var(--syntax-operator); }
+.token-punct { color: var(--syntax-punct); }
+.token-self { color: var(--purple); }
+.token-builtin { color: var(--blue); }
+.token-plain { color: var(--text); }
+
+/* Line numbers */
+.line-number {
+  color: var(--muted);
+  text-align: right;
+  user-select: none;
+  min-width: 3ch;
+  padding-right: 1.5rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--green);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+/* Glow effects */
+.glow-green {
+  text-shadow: 0 0 8px rgba(63, 185, 80, 0.7);
+}
+.glow-border {
+  box-shadow: 0 0 12px rgba(63, 185, 80, 0.3);
+}
+
+/* Skill token hover */
+.skill-token {
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+.skill-token:hover {
+  color: var(--green);
+  text-shadow: 0 0 8px rgba(63, 185, 80, 0.7);
+}
+
+/* Project card */
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.project-card:hover {
+  border-color: var(--green);
+  box-shadow: 0 0 20px rgba(63, 185, 80, 0.15);
+  transform: translateY(-3px);
+}
+
+/* Contact link token */
+.contact-link {
+  color: var(--blue);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border-bottom: 1px solid transparent;
+}
+.contact-link:hover {
+  color: var(--green);
+  border-bottom-color: var(--green);
+  text-shadow: 0 0 8px rgba(63, 185, 80, 0.6);
+}
+
+/* Sidebar file item */
+.sidebar-item {
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+}
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.sidebar-item.active {
+  background: rgba(63, 185, 80, 0.1);
+  color: var(--green);
+}
+
+/* Terminal styles */
+.terminal-window {
+  background: #010409;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.terminal-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.terminal-body {
+  padding: 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+/* Tab bar */
+.tab-item {
+  padding: 6px 16px;
+  border-right: 1px solid var(--border);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tab-item.active {
+  background: var(--bg);
+  border-bottom: 2px solid var(--green);
+  color: var(--text);
+}
+.tab-item:not(.active) {
+  background: var(--surface);
+  color: var(--muted);
+}
+.tab-item:not(.active):hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* CTA buttons as terminal commands */
+.cta-btn {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  border: 1px solid var(--green);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.cta-btn:hover {
+  background: rgba(63, 185, 80, 0.1);
+  box-shadow: 0 0 16px rgba(63, 185, 80, 0.3);
+}
+.cta-btn.secondary {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.cta-btn.secondary:hover {
+  background: rgba(88, 166, 255, 0.1);
+  box-shadow: 0 0 16px rgba(88, 166, 255, 0.3);
+}
+
+/* Inline code tags */
+.code-tag {
+  background: rgba(88, 166, 255, 0.1);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.75rem;
+  color: var(--blue);
+}
+
+/* Mobile drawer */
+.mobile-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  max-height: 70vh;
+  overflow-y: auto;
+  border-radius: 12px 12px 0 0;
+}
+.mobile-drawer.open {
+  transform: translateY(0);
+}

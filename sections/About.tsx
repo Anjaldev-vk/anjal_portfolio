@@ -12,10 +12,7 @@ const terminalLines = [
   { type: "output" as const, text: "• Optimized PostgreSQL queries and indexing strategies" },
   { type: "output" as const, text: "• Implemented JWT authentication and role-based access control" },
   { type: "blank" as const, text: "" },
-  { type: "command" as const, text: "curl -O Anjal_Dev_Resume.pdf" },
-  { type: "output" as const, text: "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current" },
-  { type: "output" as const, text: "                                 Dload  Upload   Total   Spent    Left  Speed" },
-  { type: "output" as const, text: "100  124k  100  124k    0     0   452k      0 --:--:-- --:--:-- --:--:--  454k" },
+
 ];
 
 const STATS = [

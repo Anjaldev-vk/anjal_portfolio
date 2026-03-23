@@ -5,6 +5,7 @@ const TABS = [
   { name: "about.py", sectionId: "about" },
   { name: "skills.py", sectionId: "skills" },
   { name: "projects", sectionId: "projects" },
+  { name: "typing_test.py", sectionId: "typing-test" },
   { name: "contact.py", sectionId: "contact" },
 ];
 

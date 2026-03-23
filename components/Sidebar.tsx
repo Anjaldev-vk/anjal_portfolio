@@ -16,8 +16,7 @@ const TREE: SidebarItem[] = [
   { name: "projects", sectionId: "projects", indent: 1, isFolder: true, expanded: true },
   { name: "pocket_planner.py", sectionId: "projects", indent: 2 },
   { name: "shopco_ecommerce.py", sectionId: "projects", indent: 2 },
-  // { name: "task_manager.py", sectionId: "projects", indent: 2 },
-  // { name: "blog_cms.py", sectionId: "projects", indent: 2 },
+  { name: "typing_test.py", sectionId: "typing-test", indent: 1 },
   { name: "contact.py", sectionId: "contact", indent: 1 },
   { name: "Anjal_Dev_Resume.pdf", sectionId: "resume", indent: 1 },
 ];

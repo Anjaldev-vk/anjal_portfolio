@@ -7,15 +7,17 @@ import About from "@/sections/About";
 import Skills from "@/sections/Skills";
 import Projects from "@/sections/Projects";
 import Contact from "@/sections/Contact";
+import TypingTest from "@/sections/TypingTest";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { gsap } from "@/lib/gsap";
 
-const SECTION_IDS = ["hero", "about", "skills", "projects", "contact"];
+const SECTION_IDS = ["hero", "about", "skills", "projects", "typing-test", "contact"];
 const SECTION_FILES: Record<string, string> = {
   hero: "main.py",
   about: "about.py",
   skills: "skills.py",
   projects: "projects/",
+  "typing-test": "typing_test.py",
   contact: "contact.py",
 };
 
@@ -316,6 +318,7 @@ export default function Home() {
             <About />
             <Skills />
             <Projects />
+            <TypingTest />
             <Contact />
 
             <footer

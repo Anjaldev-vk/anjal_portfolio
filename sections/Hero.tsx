@@ -21,7 +21,6 @@ const CODE_LINES = [
 ];
 
 function renderTokens(text: string, type: string, theme: "dark" | "light") {
-  const isDark = theme === "dark";
   const colors = {
     keyword: "var(--syntax-keyword)",
     string: "var(--syntax-string)",
@@ -81,29 +80,39 @@ export default function Hero({ theme }: { theme: "dark" | "light" }) {
     hasStarted.current = true;
 
     const runAnimation = async () => {
-      await sleep(500);
+      await sleep(300);
       for (let i = 0; i < CODE_LINES.length; i++) {
         const line = CODE_LINES[i];
         setTypingIdx(i);
         if (line.type === "blank") {
           setVisibleCount((c) => c + 1);
           setCurrentTyping("");
-          await sleep(150);
+          await sleep(50);
           continue;
         }
+
+        if (line.type === "comment") {
+          setCurrentTyping(line.text);
+          setVisibleCount((c) => c + 1);
+          setCurrentTyping("");
+          await sleep(30);
+          continue;
+        }
+
         for (let c = 0; c <= line.text.length; c++) {
           setCurrentTyping(line.text.slice(0, c));
-          await sleep(18 + Math.random() * 18);
+          await sleep(5 + Math.random() * 5); // Fastest typing
+          if (c > 20 && c % 10 === 0) await sleep(5);
         }
         setVisibleCount((c) => c + 1);
         setCurrentTyping("");
-        await sleep(100);
+        await sleep(40);
       }
       if (ctaRef.current) {
         gsap.fromTo(
           ctaRef.current.children,
           { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, stagger: 0.15, duration: 0.45, ease: "power2.out" }
+          { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: "power2.out" }
         );
       }
     };
@@ -117,11 +126,11 @@ export default function Hero({ theme }: { theme: "dark" | "light" }) {
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
-        padding: "32px 0",
+        padding: "80px 0",
         boxSizing: "border-box",
       }}
     >
-      <div className="section-container">
+      <div className="section-container" style={{ maxWidth: "1000px" }}>
         {/* Breadcrumb */}
         <div
           style={{
@@ -139,18 +148,17 @@ export default function Hero({ theme }: { theme: "dark" | "light" }) {
           <span style={{ color: "#58a6ff" }}>main.py</span>
         </div>
 
-        {/* Code editor */}
+        {/* Code editor container */}
         <div
           style={{
-            borderRadius: 8,
+            borderRadius: 12,
             overflow: "hidden",
             background: colors.background,
             border: `1px solid ${colors.border}`,
-            boxShadow: isDark ? "0 8px 32px rgba(0,0,0,0.4)" : "0 8px 32px rgba(0,0,0,0.05)",
+            boxShadow: isDark ? "0 16px 64px rgba(0,0,0,0.6)" : "0 12px 32px rgba(0,0,0,0.1)",
             position: "relative",
           }}
         >
-          {/* Light Mode Cell Marker */}
           {!isDark && (
             <div 
               style={{
@@ -165,52 +173,53 @@ export default function Hero({ theme }: { theme: "dark" | "light" }) {
               }}
             />
           )}
+
           {/* Title bar */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 7,
-              padding: "8px 14px",
+              gap: 8,
+              padding: "10px 16px",
               background: colors.titleBar,
               borderBottom: `1px solid ${colors.border}`,
             }}
           >
             {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
-              <div key={c} style={{ width: 11, height: 11, borderRadius: "50%", background: c }} />
+              <div key={c} style={{ width: 12, height: 12, borderRadius: "50%", background: c }} />
             ))}
             <span
               style={{
                 fontFamily: "JetBrains Mono, monospace",
                 fontSize: "0.75rem",
                 color: "#7d8590",
-                marginLeft: 6,
+                marginLeft: 8,
               }}
             >
               main.py — portfolio
             </span>
           </div>
 
-          {/* Code area */}
-          <div style={{ display: "flex", overflowX: "auto" }}>
+          {/* Code area with embedded image */}
+          <div style={{ display: "flex", position: "relative", minHeight: "450px" }}>
             {/* Line numbers */}
             <div
               style={{
                 userSelect: "none",
-                padding: "18px 13px",
+                padding: "20px 14px",
                 background: colors.lineNumbers,
                 borderRight: `1px solid ${colors.border}`,
                 color: colors.lineNumberText,
                 fontFamily: "JetBrains Mono, monospace",
                 fontSize: "0.82rem",
-                lineHeight: "1.72rem",
-                minWidth: "2.8rem",
+                lineHeight: "1.82rem",
+                minWidth: "3rem",
                 textAlign: "right",
                 flexShrink: 0,
               }}
               aria-hidden="true"
             >
-              {Array.from({ length: CODE_LINES.length }, (_, i) => (
+              {Array.from({ length: 15 }, (_, i) => (
                 <div key={i}>{i + 1}</div>
               ))}
             </div>
@@ -219,27 +228,86 @@ export default function Hero({ theme }: { theme: "dark" | "light" }) {
             <div
               className="code-block-font hero-code-area"
               style={{
-                padding: "18px 0 18px 26px",
+                padding: "20px 0 20px 30px",
                 fontFamily: "JetBrains Mono, monospace",
-                fontSize: "0.88rem",
-                lineHeight: "1.72rem",
+                fontSize: "0.92rem",
+                lineHeight: "1.82rem",
                 whiteSpace: "pre-wrap",
                 wordBreak: "break-word",
                 flex: 1,
+                position: "relative"
               }}
             >
-              {CODE_LINES.slice(0, visibleCount).map((line, i) => (
-                <div key={i}>{renderTokens(line.text, line.type, theme)}</div>
-              ))}
-              {visibleCount < CODE_LINES.length && (
-                <div>
-                  {renderTokens(currentTyping, CODE_LINES[typingIdx]?.type || "plain", theme)}
-                  <span className="cursor" />
-                </div>
-              )}
-              {visibleCount >= CODE_LINES.length && (
-                <div><span className="cursor" /></div>
-              )}
+              <div style={{ position: "relative", zIndex: 2 }}>
+                {/* Part 1: Top of code (Lines 1-3 Comments) */}
+                {CODE_LINES.slice(0, Math.min(visibleCount, 3)).map((line, i) => (
+                  <div key={i}>{renderTokens(line.text, line.type, theme)}</div>
+                ))}
+
+                {/* Mobile-only inline photo - Now placed AFTER lines 1-3 */}
+                {visibleCount > 3 && (
+                  <div 
+                    className="hero-image-mobile"
+                    style={{
+                      margin: "24px 0",
+                      width: "100%",
+                      maxWidth: "240px", 
+                      borderRadius: "14px",
+                      overflow: "hidden",
+                      border: `1px solid ${colors.border}`,
+                      display: "none",
+                      boxShadow: isDark ? "0 10px 30px rgba(0,0,0,0.5)" : "0 10px 20px rgba(0,0,0,0.1)",
+                    }}
+                  >
+                    <img src="/hero-profile.jpeg" alt="Anjal Dev V K" style={{ width: "100%", height: "auto" }} />
+                  </div>
+                )}
+
+                {/* Part 2: Remaining lines */}
+                {visibleCount > 3 && CODE_LINES.slice(3, visibleCount).map((line, i) => (
+                  <div key={i + 3}>{renderTokens(line.text, line.type, theme)}</div>
+                ))}
+
+                {visibleCount < CODE_LINES.length && (
+                  <div>
+                    {renderTokens(currentTyping, CODE_LINES[typingIdx]?.type || "plain", theme)}
+                    <span className="cursor" />
+                  </div>
+                )}
+                {visibleCount >= CODE_LINES.length && (
+                  <div><span className="cursor" /></div>
+                )}
+              </div>
+
+              {/* Desktop-only Embedded Image (Floating) */}
+              <div 
+                className="hero-image-desktop"
+                style={{
+                  position: "absolute",
+                  right: "30px",
+                  top: "50%",
+                  transform: visibleCount > 5 ? "translateY(-50%)" : "translateY(-40%)",
+                  width: "280px", 
+                  height: "360px", 
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  border: `1px solid ${colors.border}`,
+                  boxShadow: isDark ? "0 25px 60px rgba(0,0,0,0.7)" : "0 15px 30px rgba(0,0,0,0.15)",
+                  zIndex: 1,
+                  transition: "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease",
+                  opacity: visibleCount > 5 ? 1 : 0, 
+                }}
+              >
+                <img 
+                  src="/hero-profile.jpeg" 
+                  alt="Anjal Dev V K"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -251,7 +319,7 @@ export default function Hero({ theme }: { theme: "dark" | "light" }) {
             display: "flex",
             flexWrap: "wrap",
             gap: 12,
-            marginTop: 22,
+            marginTop: 32,
             opacity: 0,
           }}
         >

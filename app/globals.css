@@ -489,3 +489,18 @@ nextjs-portal,
 .mobile-drawer.open {
   transform: translateY(0);
 }
+
+/* Hero image hover lift */
+.hero-image-desktop:hover {
+  transform: translateY(-50%) translateY(-10px) scale(1.02) !important;
+  box-shadow: 0 30px 60px rgba(63, 185, 80, 0.2) !important;
+}
+
+@media (max-width: 768px) {
+  .hero-image-desktop {
+    display: none !important;
+  }
+  .hero-image-mobile {
+    display: block !important;
+  }
+}
